@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>방송 상세 페이지</title>
+
+<script type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/6.4.0/adapter.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+
+<!-- <script type="text/javascript"
+src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/5.4.0/bootbox.min.js"></script> -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/spin.js/2.3.2/spin.min.js"></script>
+<!-- <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script> -->
+
+<script type="text/javascript" src="./janus.js"></script>
+<script type="text/javascript" src="./detailPersonal.js?ver=12"></script>
+
+<!-- chat -->
+<script src="https://cdn.jsdelivr.net/npm/sockjs-client/dist/sockjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/stompjs/lib/stomp.min.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@100..900&display=swap" rel="stylesheet">
+<style>
+/* 페이지 전체 스타일 */
+body {
+	font-family: 'Pretendard', sans-serif;
+	font-size: .875rem;
+	font-weight: 500;
+	background-color: #ffffff;
+	color: #333333;
+	margin: 0;
+	padding: 20px;
+	display: flex;
+	gap: 20px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	height: 100vh;
+	box-sizing: border-box;
+}
+
+.left-side, .broadcast-detail, .chat-section {
+	/* flex: 1; */
+	overflow-y: auto;
+}
+
+/* 열른쪽 스타일 (나중에 조회) */
+.left-side {
+	/* flex: 1 1 20%; */
+	width: 15%;
+	background-color: #f1f1f1;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* 방송 상세 정보 연습 스타일 */
+.broadcast-container {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	gap: 20px;
+	width: 700px;
+}
+
+/* 방송 화면 스타일 */
+.broadcast-detail {
+	flex: 8;
+	background-color: #f8f9fa;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	transition: flex 0.3s ease;
+}
+
+.broadcast-detail img {
+	width: 100%;
+	height: auto;
+	border-radius: 10px;
+}
+
+/* 방송 정보 스타일 */
+.broadcast-info {
+	flex: 2;
+	background-color: #ffffff;
+	padding: 20px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+}
+
+.broadcaster-details {
+	flex: 1;
+	min-width: 200px;
+}
+
+.broadcast-title h1 {
+	font-size: 2em;
+	color: #4b0082;
+	margin-bottom: 20px;
+}
+
+.profile-banner {
+	display: flex;
+	align-items: center;
+	flex-wrap: nowrap;
+}
+
+.profile-image {
+	width: 50px;
+	height: 50px;
+	border-radius: 50%;
+	margin-right: 10px;
+}
+
+.broadcaster-info h2 {
+	margin: 0;
+}
+
+.recoding-buttons {
+	display: flex;
+	gap: 10px;
+	align-items: center;
+	flex-shrink: 0;
+}
+
+.recoding-buttons button {
+	padding: 10px;
+	min-width: 100px;
+	background-color: #4b0082;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.2s;
+}
+
+.recoding-buttons button:hover {
+	background-color: #6a0dad;
+	transform: scale(1.05);
+}
+
+/* 채팅창 접기 버튼 스타일 */
+.collapse-button {
+	padding: 10px;
+	background-color: #4b0082;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.2s;
+}
+
+.collapse-button:hover {
+	background-color: #6a0dad;
+	transform: scale(1.05);
+}
+
+/* 채팅창 연습 스타일 */
+.chat-section {
+	flex: 1;
+	min-width: 300px;
+	background-color: #e9ecef;
+	border-radius: 10px;
+	padding: 20px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	position: relative;
+	transition: max-height 0.3s ease, opacity 0.3s ease;
+}
+
+/* 채팅창 허더 스타일 */
+.chat-header {
+	background-color: #4b0082;
+	padding: 10px;
+	text-align: center;
+	font-size: 1.2em;
+	color: #ffffff;
+	border-radius: 10px 10px 0 0;
+}
+
+/* 채팅 메시지 박스 스타일 */
+.chat-box {
+	flex: 1;
+	min-height: 300px;
+	max-height: calc(100% - 120px);
+	overflow-y: auto;
+	background-color: #ffffff;
+	padding: 10px;
+	margin-bottom: 10px;
+	border-radius: 0 0 10px 10px;
+	border: 1px solid #dee2e6;
+}
+
+/* 채팅 메시지 스타일 */
+.chat-message {
+	margin: 10px 0;
+}
+
+/* 채팅 입력 연습 스타일 */
+.chat-input {
+	display: flex;
+	gap: 10px;
+}
+
+.chat-input input[type="text"] {
+	flex: 1;
+	padding: 10px;
+	border: 1px solid #ced4da;
+	border-radius: 5px;
+}
+
+.chat-input button {
+	padding: 10px;
+	min-width: 100px;
+	background-color: #4b0082;
+	color: #ffffff;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s, transform 0.2s;
+}
+
+.chat-input button:hover {
+	background-color: #6a0dad;
+	transform: scale(1.05);
+}
+
+/* 채팅창 접히지 않은 상타 스타일 */
+.chat-section.collapsed {
+	max-height: 0;
+	opacity: 0;
+	padding: 0;
+}
+
+.chat-section.collapsed+.broadcast-detail {
+	flex: 3 1 80%;
+}
+
+</style>
+<script>
+	let stompClient = null;
+
+	function toggleChat() {
+		const chatSection = document.querySelector('.chat-section');
+		const broadcastDetail = document.querySelector('.broadcast-detail');
+		if (chatSection.classList.contains('collapsed')) {
+			chatSection.classList.remove('collapsed');
+			broadcastDetail.style.flex = '3 1 60%';
+			document.querySelector('.collapse-button').innerHTML = '접기◀';
+		} else {
+			chatSection.classList.add('collapsed');
+			broadcastDetail.style.flex = '3 1 80%';
+			document.querySelector('.collapse-button').innerHTML = '▶펼치기';
+		}
+	}
+	//chat
+	function connect(){
+
+		/* 
+		여기서 접근하는 것은 서버측이 된다. 여기서는 무조건 http이다. localhost가 https가 아니고 aws가 https가 아니다
+		git pages에서 aws에 접근 할 때 git pages의 주소가 https가 된다. 서버에 접속하는 클라이언트가 http냐 https냐 이지 
+		여기서 정하는 것은 서버의 주소이다.
+		*/
+
+		//로컬에서 자바 스프링 실행, 로컬 클라이언트에서 접속 시 정상 작동
+		//const socket = new SockJS("http://localhost:80/chat"); 
+
+		//로컬에서 자바 스프링 실행, git pages에서 접속 시 작동 하지 않음
+		//const socket = new SockJS("http://172.30.1.51/chat"); 
+
+		//aws에 chatserver 배포, http로 로컬 클라이언트에서 접속 시 정상 작동, git pages에서 접속 시 작동 안됨
+		//const socket = new SockJS("https://43.201.71.202:8080/chat"); //여기에 https://43.201.71.202/chat 는 없다
+		const socket = new SockJS("https://chatserverpj.o-r.kr/chat"); //여기에 https://43.201.71.202/chat 는 없다
+		
+		
+		stompClient = Stomp.over(socket);
+		//topic : 서버에서 보낸 메세지
+		stompClient.connect({}, (frame) => {
+			stompClient.subscribe('/topic/messages', (message) => {
+				showMessage(JSON.parse(message.body))
+			})
+		})
+	}
+
+	function sendMessage(){
+		const sender = username;
+		const contents = document.getElementById("message").value;
+
+		//app : 클라이언트에서 보내는 메세지
+		stompClient.send('/app/sendMessage', {} , JSON.stringify({sender, contents}));
+	}
+
+	function showMessage(message){
+		let messageDiv = document.getElementById("messages");
+		const messageElem = document.createElement('p');
+		messageElem.contentEditable = true;
+
+		//message = JSON.parse(message);
+		let sender = message.sender;
+		let contents = message.contents;
+
+		//messageElem.textContent = sender + " : " + contents;
+		messageElem.innerHTML = '<span style="color:red">'+sender+'</span> : ' + contents;
+		console.log(message)
+		console.log(messageElem)
+		messageDiv.appendChild(messageElem);
+
+		document.getElementById("message").value = "";
+	}
+
+	function keySendMsg(event){
+		var msgtxt = document.getElementById("message");
+		if(event.key === "Enter"){
+			sendMessage();
+			msgtxt.value = "";
+		}
+	}
+
+	connect();
+</script>
+</head>
+<body>
+	<!-- 레프트 사이드 -->
+	<div class="left-side">
+		<!-- 빈 공간 -->
+	</div>
+
+	<!-- 방송 상세 정보 -->
+	<div class="broadcast-container">
+		<!-- 방송 화면 -->
+		<div class="broadcast-detail">
+			<div class="panel-body" id="videolocal"></div>
+			<div id="recodingTxt" style="display:none;font-weight: bold;">Rcoding now ...</div>
+			<div class="panel-body" id="videoremote1"></div>
+		</div>
+
+		<!-- 방송 정보 -->
+		<div class="broadcast-info">
+			<div class="broadcaster-details">
+				<div class="broadcast-title">
+					<h1>방송 제목</h1>
+				</div>
+				<div class="profile-banner">
+					<img src="../img/mentoricon.png" alt="방송중인 사람 프로필 이미지" class="profile-image">
+					<div class="broadcaster-info">
+						<h2><span class="label label-primary hide" id="publisher2" style="color:red">mentor</span></h2>
+						<p>사용자 등급: 중급</p>
+						<div class="keywords">키워드: #선물 #크리스마스 #장식</div>
+					</div>
+				</div>
+			</div>
+
+			<!-- 녹화 및 화면공유 -->
+			<div class="recoding-buttons">
+				<div id="menuBtns" style="margin: 5px;display: none;">
+					<a href="#" style="text-decoration: none;padding: 3px;" onclick="startRecoding()"><img src="../img/recoding.gif" style="height: 20px;width: 30px;" alt="녹화 시작" id="startRec"></a>
+                    <a href="#" style="text-decoration: none;padding: 3px;" onclick="stopRecoding()"><img src="../img/recodingStop.png" style="height: 20px;width: 30px;display:none" alt="녹화 중지" id="stopRec"></a>
+					<!-- <a href="" style="text-decoration: none;padding: 3px;margin: 3px;"><img src="../img/share.png" style="height: 20px;width: 30px;" alt="화면 공유"></a> -->
+				</div>
+				<div id="publishDiv" style="margin: 5px;"></div> <!-- start stop button -->
+				<!-- 채팅창 접기 버튼 -->
+				<button class="collapse-button" onclick="toggleChat()">접기◀</button>
+			</div>
+		</div>
+
+	</div>
+	
+	<!-- 채팅창 연습 -->
+	<div class="chat-section">
+		<div class="chat-header">채팅창</div>
+		<div class="chat-box" id="messages">
+		
+		</div>
+		<div class="chat-input">
+			<div id="usernamediv" style="align-items: center;text-align: center;width:80px;font-size:16px;font-weight:bold;margin-top: 10px;"></div>
+			<input type="text" style="width:380px" id="message" placeholder="메시지를 입력하세요..." onkeypress="keySendMsg(event)">
+			<button onclick="sendMessage()">전송</button>
+		</div>
+	</div>
+
+	<script>
+
+		/* js파일에서 받은 변수 usermode를 바로 사용 가능 - 0:구매자, 1:판매자 */
+
+		if(usermode === "0"){
+			$('#publishDiv').hide();
+			$('#videolocal').hide();
+			$('#videoremote1').show();
+		}else if(usermode === "1"){
+			$('#publishDiv').show();
+			$('#videolocal').show();
+			$('#videoremote1').hide();
+		}
+
+		var usernamediv = document.getElementById("usernamediv");
+		usernamediv.innerText = username;
+
+
+		//화면 녹화
+		if(usermode === "1") {
+			var menuBtns = document.getElementById("menuBtns");
+			menuBtns.style.display = 'block';
+		}
+
+		function toggleParticipants() {
+			const participantSection = document.querySelector('.participant-section');
+	
+			if (participantSection.classList.contains('collapsed')) {
+					//Participantssection.style.display = 'block';
+					participantSection.classList.remove('collapsed');
+					broadcastDetail.style.flex = '8';
+					document.querySelector('.participant-toggle-button').innerHTML = '접기◀';
+			} else {
+					//Participantssection.style.display = 'none';
+					participantSection.classList.add('collapsed');
+					broadcastDetail.style.flex = '11';
+					document.querySelector('.participant-toggle-button').innerHTML = '▶펼치기';
+			}
+		}
+	
+		let mediaRecorder;
+		let recordedChunks = [];
+	
+		// 카메라 스트림 가져오기 - 카메라 켜기 
+		navigator.mediaDevices.getUserMedia({ video: true, audio: true })
+			.then(stream => {
+					//preview.srcObject = stream; //<video> 태그에 실시간으로 보여줌
+					/* 
+					MediaRecorder 설정 <- 녹화 기능
+					WebRTC - 실시간 전송 , RTCPeerConnection, RTCDataChannel
+					MediaRecorder - 비디오/오디오 데이터를 파일로 저장, 실시간 불가능
+					*/
+					mediaRecorder = new MediaRecorder(stream); //실시간 미디어 스트림을 녹화할 수 있게 해줍니다.
+	
+					// 녹화 데이터 처리
+					mediaRecorder.ondataavailable = event => {
+					if (event.data.size > 0) {
+							recordedChunks.push(event.data);
+							console.log(recordedChunks)
+							// 서버로 전송 (WebSocket 또는 HTTP POST 사용)
+							//sendToServer(event.data);
+					}
+					};
+	
+					mediaRecorder.onstart = () => {
+					alert("녹화가 시작되었습니다.")
+					rectext.style.display = "inline";
+					preview.play() = true;
+					}
+	
+					mediaRecorder.onstop = () => {
+						/*  
+						모든 데이터 병합 후 다운로드 - 녹화된 파일 다운
+						녹화를 멈추면 recordedChunks 배열의 데이터를 병합하여 Blob 객체를 만듭니다.
+						Blob을 URL로 변환하고, 다운로드 링크를 생성해 사용자가 녹화된 파일을 다운로드할 수 있게 합니다.
+						*/
+						const blob = new Blob(recordedChunks, { type: 'video/webm' });
+						const url = URL.createObjectURL(blob);
+						const a = document.createElement('a');
+						//a.style.display = 'none';
+						a.href = url;
+						a.download = 'recorded-video.webm';
+						document.body.appendChild(a);
+						a.click();
+						URL.revokeObjectURL(url);
+						preview.pause();
+						preview.currentTime = 0;
+						preview.style.display = "none";
+						rectext.style.display = "none";
+					};
+			});
+	
+		function startRecoding(){
+	
+			event.preventDefault();
+			//start명령어는 onstart를 호출하는데 onstart메소드는 다른 처리를 하기 위해서고 start명령어만으로 바로 녹화는 실행된다.
+			console.log("Recording started...");
+			var recodingTxt = document.getElementById("recodingTxt");
+			recodingTxt.style.display = 'inline';
+	
+			var startRec = document.getElementById("startRec");
+			startRec.style.display = 'none';
+			//this.style.display = 'none';
+	
+			var stopRect = document.getElementById("stopRec");
+			stopRect.style.display = 'inline';
+	
+			recordedChunks = [];
+			mediaRecorder.start();  
+		}
+	
+		function stopRecoding(){
+			event.preventDefault();
+			
+			var recodingTxt = document.getElementById("recodingTxt");
+			recodingTxt.style.display = 'none';
+			
+			var startRec = document.getElementById("startRec");
+			startRec.style.display = 'inline';
+			
+			var stopRect = document.getElementById("stopRec");
+			stopRect.style.display = 'none';
+			
+			mediaRecorder.stop();
+		}
+	</script>
+</body>
+</html>
