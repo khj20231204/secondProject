@@ -17,12 +17,12 @@
    <img src="readme_img/schedule.png" style="border:3px solid black;border-radius:9px;width:500px">    
 
 1. # WebRTC란?
-   <img src="readme_img/server.webp" style="border:3px solid black;border-radius:9px;width:500px">   
+   <img src="readme_img/server.webp" style="border:3px solid black;border-radius:9px;width:700px">   
 
    <a href="https://developer.mozilla.org/ko/docs/Web/API/WebRTC_API">WebRTC MSDN</a>   
    WebRTC(Web Real-Time Communication)은 웹 애플리케이션과 사이트가 중간자 없이 브라우저 간에 오디오나 영상 미디어를 포착하고 마음대로 스트림할 뿐 아니라, 임의의 데이터도 교환할 수 있도록 하는 기술입니다. WebRTC를 구성하는 일련의 표준들은 플러그인이나 제 3자 소프트웨어 설치 없이 종단 간 데이터 공유와 화상 회의를 가능하게 합니다.   
-   MSDN에 있는 WebRTC의 정의입니다. 중간자(특정 서버)없이 브라우저간(Peer-to-Peer) 스트림을 주고 받을 수 있는 강력한 멀티미디어 기능을 제공하는 API입니다.   
-   일단 통신이 이루어지면 서버는 필요가 없지만 초기 브라우저간 연결을 설정하기 위해서는 서버가 필수입니다. WebRTC구현을 위해서는 Signaling서버, STUN서버, TURN서버 3개의 서버가 필요합니다.   
+
+   위에 글은 MSDN에 있는 WebRTC의 정의입니다. 중간자(특정 서버)없이 브라우저간(Peer-to-Peer) 스트림을 주고 받을 수 있는 강력한 멀티미디어 기능을 제공하는 API가 WebRTC입니다. 일단 통신이 이루어지면 서버는 필요가 없지만 초기 브라우저간 연결을 설정하기 위해서는 서버가 필수입니다. WebRTC구현을 위해서는 Signaling서버, STUN서버, TURN서버 3개의 서버가 필요합니다.   
    
    Signaling서버 - 초기 통신 단계   
    SDP 및 ICE 후보 교환   
