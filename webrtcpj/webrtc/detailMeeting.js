@@ -44,19 +44,19 @@ $(document).ready(function() {
 						opaqueId: opaqueId,
 						success: function(pluginHandle) {
 							
-						sfutest = pluginHandle;
-						Janus.log("Plugin attached! (" + sfutest.getPlugin() + ", id=" + sfutest.getId() + ")");
-						Janus.log("  -- This is a publisher/manager");
-						// Prepare the username registration
-						
-						if(usermode === 0){ //구매자
-						}else if(usermode === 1){ //판매자
-						}
-						
-						joinUser(); //방에 입장
+							sfutest = pluginHandle;
+							Janus.log("Plugin attached! (" + sfutest.getPlugin() + ", id=" + sfutest.getId() + ")");
+							Janus.log("  -- This is a publisher/manager");
+							// Prepare the username registration
+							
+							if(usermode === 0){ //구매자
+							}else if(usermode === 1){ //판매자
+							}
+							
+							joinUser(); //방에 입장
 
-					Janus.log("Room List > ");
-					//roomList();
+							Janus.log("Room List > ");
+							//roomList();
 						},
 						error: function(error) {
 							Janus.error("  -- Error attaching plugin...", error);

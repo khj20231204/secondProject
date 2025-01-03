@@ -18,6 +18,7 @@
 
 1. # WebRTC란?
    <img src="readme_img/server.webp" style="border:3px solid black;border-radius:9px;width:500px">   
+
    <a href="https://developer.mozilla.org/ko/docs/Web/API/WebRTC_API">WebRTC MSDN</a>   
    WebRTC(Web Real-Time Communication)은 웹 애플리케이션과 사이트가 중간자 없이 브라우저 간에 오디오나 영상 미디어를 포착하고 마음대로 스트림할 뿐 아니라, 임의의 데이터도 교환할 수 있도록 하는 기술입니다. WebRTC를 구성하는 일련의 표준들은 플러그인이나 제 3자 소프트웨어 설치 없이 종단 간 데이터 공유와 화상 회의를 가능하게 합니다.   
    MSDN에 있는 WebRTC의 정의입니다. 중간자(특정 서버)없이 브라우저간(Peer-to-Peer) 스트림을 주고 받을 수 있는 강력한 멀티미디어 기능을 제공하는 API입니다.   
@@ -35,28 +36,29 @@
    *서버는 연계된 기업에서 야누스 서버를 제공해 주었기 때문에 해당 서버를 사용했습니다.   
 
 1. # WebRTC Architecture
+
+   __야누스 객체 생성__   
    ```javascript
       janus = new Janus(
 		{
 			server: server,
 			success: function() {
-				
-				janus.attach(
-					{
-						plugin: "janus.plugin.videoroom",
-						opaqueId: opaqueId,
-						success: function(pluginHandle) {
-							
-						sfutest = pluginHandle;
-                  ...
-                  }
-               }
-               ...
+         janus.attach(
+         {
+            plugin: "janus.plugin.videoroom",
+            opaqueId: opaqueId,
+            success: function(pluginHandle) {
+            sfutest = pluginHandle;
+            ...
+            }
+         })
+         ...
          }
-      }         
+      })         
    ```   
-   야누스 서버 객체를 생성하고 접속이 성공하면 핸드러를 받아옵니다.   
+   야누스 서버 객체를 생성하고 접속이 성공하면 핸들러를 받아옵니다.   
 
+   __핸들러 안에 있는 콜백 함수들__   
    ```javascript
       iceState: function(state) { ... }
       mediaState: function(medium, on) { ... }
@@ -75,19 +77,15 @@
    onremotestream: 원격 피어로부터 수신된 미디어 스트림을 처리   
    oncleanup:  플러그인 인스턴스가 종료되거나 연결이 해제될 때 호출   
 
+   __자신의 화면 공유__   
    ```javascript
-      //자신의 화면 공유
       async function shareScreen(useAudio) {
-
          var originalStream = await navigator.mediaDevices.getUserMedia({ video: true });
-         var myvideo = document.getElementById("myvideo");
-
          try{
             const screenStream = await navigator.mediaDevices.getDisplayMedia({
                video: true,
                audio: false,
             });
-
             sfutest.createOffer(
             {
                stream: screenStream,
@@ -101,35 +99,22 @@
                   sfutest.send({ message: publish, jsep: jsep });
                },
                error: function(error) {
-                  Janus.error("WebRTC error:", error);
-                  if(useAudio) {
-                     publishOwnFeed(false);
-                  } else {
-                     bootbox.alert("WebRTC error... " + error.message);
-                     $('#publish').removeAttr('disabled').click(function() { publishOwnFeed(true); });
-                  }
+                ...
                }
             });
-
             screenStream.getTracks().forEach(track => {
-               track.onended = () => {
-                  alert("공유 정지");
-                  console.log('화면 공유가 중지되었습니다.');
-                  
-                  myvideo.srcObject = originalStream;
-                  window.location.reload();
-               };
+            track.onended = () => {
+               //공유 정지
+               myvideo.srcObject = originalStream;
+               window.location.reload();
+            };
          });
-         } catch (err) {
-            console.error("화면 공유 실패:", err);
-         }
-      }
+      }}
    ```
 
-   화상화면 설정   
+   __화상화면 설정__   
    ```javascript
-      sfutest.createOffer(
-		{
+      sfutest.createOffer({
 			media: { audioRecv: false, videoRecv: false, audioSend: useAudio, videoSend: true },	 
 			simulcast: doSimulcast,
 			simulcast2: doSimulcast2,
@@ -137,7 +122,7 @@
 				var publish = { request: "configure", audio: useAudio, video: true };
 				sfutest.send({ message: publish, jsep: jsep });
 			},
-      }
+      })
    ```
 
 1. # Socket Architecture
