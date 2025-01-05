@@ -170,19 +170,37 @@
 
 1. # 시연
    1. ## 회의 모드   
-      <img src="readme_img/13.png" style="border:3px solid black;border-radius:9px;width:700px">   
-      <img src="readme_img/mtm.gif" style="border:3px solid black;border-radius:9px;width:700px">   
+      <table>
+         <tr>
+         <td><img src="readme_img/13.png" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         <td><img src="readme_img/mtm.gif" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         </tr>
+      </table>   
 
-   1. ## 회의 모드 - 화면 공유
-      <img src="readme_img/share.png" style="border:3px solid black;border-radius:9px;width:700px">   
-      <img src="readme_img/mtm_share.gif" style="border:3px solid black;border-radius:9px;width:700px">   
+   1. ## 회의 모드 - 화면 공유   
+      <table>
+         <tr>
+         <td><img src="readme_img/share.png" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         <td><img src="readme_img/mtm_share.gif" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         </tr>
+      </table>   
 
    1. ## 회의 모드 - 녹화   
-      <img src="readme_img/recoding.png" style="border:3px solid black;border-radius:9px;width:700px">   
-      <img src="readme_img/mtm_recoding.gif" style="border:3px solid black;border-radius:9px;width:700px">   
-
+      <table>
+         <tr>
+         <td><img src="readme_img/recoding.png" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         <td><img src="readme_img/mtm_recoding.gif" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         </tr>
+      </table>   
+      
    1. ## 개인 방송 모드   
-      <img src="readme_img/one.png" style="border:3px solid black;border-radius:9px;width:700px">   
+      <table>
+         <tr>
+         <td><img src="readme_img/one.png" style="border:3px solid black;border-radius:9px;width:400px"></td>
+         <td></td>
+         </tr>
+      </table>   
+      
 
 
 
