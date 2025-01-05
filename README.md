@@ -125,6 +125,18 @@
       })
    ```
 
-1. # Socket Architecture
+1. #  Project Architecture
+   <img src="readme_img/chat_main.png" style="border:3px solid black;border-radius:9px;width:700px">   
+   최초 로딩이 되면 야누스 서버를 통해 P2P 연결이 됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 동작되고 있습니다.   
+
+   1. ## Janus Server
+      
+
+   1. ## Socket Chatting
+
+1. # https와 http   
+
+
+
 
 
