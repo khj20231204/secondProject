@@ -1,7 +1,7 @@
 # secondProjec - 두번째 프로젝트 : 화상 공방
    <img src="readme_img/readme_main.jpg" style="border:3px solid black;border-radius:9px;width:300px">    
 
-   2차 프로젝트는 팀 프로젝트로 학원에서 WebRTC라는 API를 활용해서 프로젝트를 진행할 것을 주문하였고 그에 따라 팀원들끼리 의견을 모아 생각한 프로젝트가 __화상 공방__ 입니다. 공예를 배우고 싶지만 시간이 없어 공방에 갈 수 없는 바쁜 현대인을 위해 화상으로 멘토와 함께 같이 공예를 만들어가는 화상 공방 사이트입니다. 기업과 연계하여 프로젝트를 수행을 하였기 때문에 JSFlux라는 회사로부터 클라이언트의 기본적인 소스 부분을 받아 해당 소스를 분석, 재구성하여 WebRTC부분을 구현했습니다. 로그인, 게시판, 댓글, 결제, 클래스 등록, 리뷰 등 웹 사이트에 대한 기능은 다른 팀원들이 구현을 하였고 WebRTC부분의 소스 분석과 구현은 제가 했고 2개 페이지 디자인은 다른 팀원이 했습니다. 따라서 구현 부분 설명은 WebRTC부분만 설명 드리겠습니다.   
+   2차 프로젝트는 팀 프로젝트로 학원에서 WebRTC라는 API를 활용해서 프로젝트를 진행할 것을 주문하였고 그에 따라 팀원들끼리 의견을 모아 생각한 프로젝트가 __화상 공방__ 입니다. 공예를 배우고 싶지만 시간이 없어 공방에 갈 수 없는 바쁜 현대인을 위해 화상으로 멘토와 함께 같이 공예를 만들어가는 화상 공방 사이트입니다. 기업과 연계하여 프로젝트를 수행을 하였기 때문에 JSFlux라는 회사로부터 클라이언트의 기본적인 소스 부분을 받아 해당 소스를 분석, 재구성하여 WebRTC부분을 구현했습니다. 로그인, 게시판, 댓글, 결제, 클래스 등록, 리뷰 등 웹 사이트에 대한 기능은 다른 팀원들이 구현을 하였고 WebRTC부분의 소스 분석과 구현은 저 혼자 했습니다. 따라서 구현 부분 설명은 WebRTC부분만 설명 드리겠습니다.   
 
    *demo 디렉토리는 챗팅을 하기 위한 자바 서버   
    *webrtcpj 디렉토리는 webrtc구현 부분
@@ -10,6 +10,7 @@
    <img src="readme_img/develop_env.png" style="border:3px solid black;border-radius:9px;width:500px">    
 
 1. # 역할 분담
+   전체 인원 : 6명   
    <img src="readme_img/part.png" style="border:3px solid black;border-radius:9px;width:500px">    
 
 1. # 개발 일정
@@ -131,19 +132,28 @@
 
 1. #  Project Architecture
    <img src="readme_img/chat_main.png" style="border:3px solid black;border-radius:9px;width:700px">   
+
    최초 로딩이 되면 미디어를 담당하는 야누스 서버로 초기화됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 동작되고 있습니다.   
 
    1. ## Git Pages   
       <img src="readme_img/gitpages.png" style="border:3px solid black;border-radius:9px;width:500px">   
-      다른 네트워크 영역의 컴퓨터와 휴대폰으로 접속하기 위해서 Git Pages웹호스팅을 사용했습니다. Git pages 주소가 서버 역할을 하게됩니다. 클라이언트들이 해당 주소로 접속을 하면 야누스 서버에서 이벤트가 발생할 때마다 콜백함수를 클라이언트로 돌려줍니다.    
+
+      다른 네트워크 영역의 컴퓨터와 휴대폰으로 접속하기 위해서 Git Pages웹호스팅을 사용했습니다. Git pages 주소가 서버 역할을 하게됩니다. 클라이언트들이 해당 주소로 접속을 하면 야누스 서버에서 이벤트가 발생할 때마다 콜백함수를 클라이언트로 돌려줍니다.   
       <img src="readme_img/cname.png" style="border:3px solid black;border-radius:9px;width:500px">   
       CNAME를 사용하여 도메인명을 변경하였습니다. awsonly2024.github.io가 원래 주소인데 해당 주소를 치면 webrtcpj.o-r.kr이란 도메인으로 접속이 됩니다.   
 
-   1. ## Socket Chatting
-      
+   1. ## Socket Chatting   
+      자바 스프링 SockJS와 STOMP로 구현한 채팅 서버를 Docker 이미지로 만들어 EC2에 배포를 했습니다. EC2는 https만 접속을 허용하는데 자바 서버에는 https에 대한 처리가 되어있지 않았기 때문에 https로 request를 받은 경우 이를 처리하는 부분이 필요했습니다.   
+      ```yml
+         server.port=443
+         server.ssl.enabled=true
+         server.ssl.key-store=classpath:keystore.p12
+         server.ssl.key-store-password=chatserverkey
+         server.ssl.key-store-type=PKCS12
+         server.ssl.key-alias=chatserverkey
+      ```   
+      SSL인증서로 키스토어를 생성합니다. keystore.p12. 해당 파일의 경로와 설정 옵션들을 application.properties에 기재합합니다.   
 
-
-1. # https와 http   
 
 
 
