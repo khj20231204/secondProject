@@ -35,7 +35,8 @@
 
    *서버는 연계된 기업에서 야누스 서버를 제공해 주었기 때문에 해당 서버를 사용했습니다.   
 
-1. # WebRTC Architecture
+1. # Janus Server Architecture
+   야누스 서버는 미디어를 담당하는 서버로 다자간 화상 회의 방식에서 미디어 스트림 중계를 담당합니다. 그리고 녹화 기능과 오디오 스트리밍을 제공합니다.
 
    __야누스 객체 생성__   
    ```javascript
@@ -110,7 +111,9 @@
             };
          });
       }}
-   ```
+   ```   
+   Janus 서버의 SFU(Simple Forwarding Unit) 기능을 사용하여 sfutest.createOffer 스트림 생성   
+   sfutest.send({ message: publish, jsep: jsep }) : 설정 메시지(publish)와 SDP(jsep)를 전송하여 미디어 스트림을 전송   
 
    __화상화면 설정__   
    ```javascript
@@ -123,16 +126,22 @@
 				sfutest.send({ message: publish, jsep: jsep });
 			},
       })
-   ```
+   ```   
+   createOffer로 스트림 생성하고 audio와 video 설정   
 
 1. #  Project Architecture
    <img src="readme_img/chat_main.png" style="border:3px solid black;border-radius:9px;width:700px">   
-   최초 로딩이 되면 야누스 서버를 통해 P2P 연결이 됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 동작되고 있습니다.   
+   최초 로딩이 되면 미디어를 담당하는 야누스 서버로 초기화됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 동작되고 있습니다.   
 
-   1. ## Janus Server
-      
+   1. ## Git Pages   
+      <img src="readme_img/gitpages.png" style="border:3px solid black;border-radius:9px;width:500px">   
+      다른 네트워크 영역의 컴퓨터와 휴대폰으로 접속하기 위해서 Git Pages웹호스팅을 사용했습니다. Git pages 주소가 서버 역할을 하게됩니다. 클라이언트들이 해당 주소로 접속을 하면 야누스 서버에서 이벤트가 발생할 때마다 콜백함수를 클라이언트로 돌려줍니다.    
+      <img src="readme_img/cname.png" style="border:3px solid black;border-radius:9px;width:500px">   
+      CNAME를 사용하여 도메인명을 변경하였습니다. awsonly2024.github.io가 원래 주소인데 해당 주소를 치면 webrtcpj.o-r.kr이란 도메인으로 접속이 됩니다.   
 
    1. ## Socket Chatting
+      
+
 
 1. # https와 http   
 
