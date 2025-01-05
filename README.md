@@ -197,13 +197,7 @@
       <table>
          <tr>
          <td><img src="readme_img/one.png" style="border:3px solid black;border-radius:9px;width:400px"></td>
-         <td></td>
+         <td><img src="readme_img/otm.gif" style="border:3px solid black;border-radius:9px;width:400px"></td>
          </tr>
       </table>   
-      
-
-
-
-
-
-
+   
