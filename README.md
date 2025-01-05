@@ -11,11 +11,25 @@
 
 1. # 역할 분담
    전체 인원 : 6명   
+   본인 : 김현지 - WebRTC 부분   
    <img src="readme_img/part.png" style="border:3px solid black;border-radius:9px;width:500px">    
 
 1. # 개발 일정
-   전체 개발 기간은 1개월이였습니다.   
+   개발 기간 : 1개월   
    <img src="readme_img/schedule.png" style="border:3px solid black;border-radius:9px;width:500px">    
+
+1. # 요구 분석
+
+   __화상 클래스__   
+
+   1.방 생성   
+      Many To Many : 회의 모드로 멘토(가르치는 사람)와 멘티(배우는 사람) 모두 화면에 영상이 출력, 인원 제한 6명   
+      One To Many : 유튜브나 아프리카TV와 같은 개인 방송 모드로 멘토(가르치는 사람)만 화면에 영상이 출력되고 멘티(배우는 사람)는 출력되지 않음, 인원 제한 없음
+
+   2.기능   
+      화면 공유 기능(멘토만 해당) : 멘토의 화면을 전체 멘티들과 공유   
+      녹화(멘토만 해당) : 현재 수업하고 있는 자신의 화면을 녹화   
+      채팅 : One To Many 모드에서 멘토와 멘티들의 의사소통 수단으로 사용용
 
 1. # WebRTC란?
    <img src="readme_img/server.webp" style="border:3px solid black;border-radius:9px;width:700px">   
@@ -133,7 +147,7 @@
 1. #  Project Architecture
    <img src="readme_img/chat_main.png" style="border:3px solid black;border-radius:9px;width:700px">   
 
-   최초 로딩이 되면 미디어를 담당하는 야누스 서버로 초기화됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 동작되고 있습니다.   
+   최초 로딩이 되면 미디어를 담당하는 야누스 서버로 초기화됩니다. 이후 One To Many 방식에서 멘토와 멘티의 커뮤니케이션을 위해 채팅을 이용합니다. 채팅 서버는 스프링 부트로 만들어 EC2의 도커 이미지로 실행되고 있습니다.   
 
    1. ## Git Pages   
       <img src="readme_img/gitpages.png" style="border:3px solid black;border-radius:9px;width:500px">   
@@ -152,7 +166,23 @@
          server.ssl.key-store-type=PKCS12
          server.ssl.key-alias=chatserverkey
       ```   
-      SSL인증서로 키스토어를 생성합니다. keystore.p12. 해당 파일의 경로와 설정 옵션들을 application.properties에 기재합합니다.   
+      SSL인증서로 키스토어를 생성합니다. keystore.p12. 해당 파일의 경로와 설정 옵션들을 application.properties에 기재합니다.   
+
+1. # 시연
+   1. ## 회의 모드   
+      <img src="readme_img/13.png" style="border:3px solid black;border-radius:9px;width:700px">   
+      <img src="readme_img/mtm.gif" style="border:3px solid black;border-radius:9px;width:700px">   
+
+   1. ## 회의 모드 - 화면 공유
+      <img src="readme_img/share.png" style="border:3px solid black;border-radius:9px;width:700px">   
+      <img src="readme_img/mtm_share.gif" style="border:3px solid black;border-radius:9px;width:700px">   
+
+   1. ## 회의 모드 - 녹화   
+      <img src="readme_img/recoding.png" style="border:3px solid black;border-radius:9px;width:700px">   
+      <img src="readme_img/mtm_recoding.gif" style="border:3px solid black;border-radius:9px;width:700px">   
+
+   1. ## 개인 방송 모드   
+      <img src="readme_img/one.png" style="border:3px solid black;border-radius:9px;width:700px">   
 
 
 
