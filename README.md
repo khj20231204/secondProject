@@ -1,10 +1,10 @@
 # secondProjec - 두번째 프로젝트 : 화상 공방
    <img src="readme_img/readme_main.jpg" style="border:3px solid black;border-radius:9px;width:300px">    
 
-   2차 프로젝트는 팀 프로젝트로 학원에서 WebRTC라는 API를 활용해서 프로젝트를 진행할 것을 주문하였고 그에 따라 팀원들끼리 의견을 모아 생각한 프로젝트가 __화상 공방__ 입니다. 공예를 배우고 싶지만 시간이 없어 공방에 갈 수 없는 바쁜 현대인을 위해 화상으로 멘토와 함께 같이 공예를 만들어가는 화상 공방 사이트입니다. 기업과 연계하여 프로젝트를 수행을 하였기 때문에 JSFlux라는 회사로부터 클라이언트의 기본적인 소스 부분을 받아 해당 소스를 분석, 재구성하여 WebRTC부분을 구현했습니다. 로그인, 게시판, 댓글, 결제, 클래스 등록, 리뷰 등 웹 사이트에 대한 기능은 다른 팀원들이 구현을 하였고 WebRTC부분의 소스 분석과 구현은 저 혼자 했습니다. 따라서 구현 부분 설명은 WebRTC부분만 설명 드리겠습니다.   
+   2차 프로젝트는 팀 프로젝트로 학원에서 WebRTC라는 API를 활용해서 프로젝트를 진행할 것을 주문하였고 그에 따라 팀원들끼리 의견을 모아 생각한 프로젝트가 __화상 공방__ 입니다. 공예를 배우고 싶지만 시간이 없어 공방에 갈 수 없는 바쁜 현대인을 위해 화상으로 멘토와 함께 같이 공예를 만들어가는 화상 공방 사이트입니다. 기업과 연계하여 프로젝트를 수행을 하였기 때문에 JSFlux라는 회사로부터 클라이언트의 기본적인 소스 부분을 받아 해당 소스를 분석, 재구성하여 WebRTC부분을 구현했습니다. 로그인, 게시판, 댓글, 결제, 클래스 등록, 리뷰 등 웹 사이트에 대한 기능은 다른 팀원들이 구현을 하였고 제가 맡은 부분은 WebRTC이기 때문에 구현 부분 설명은 WebRTC부분만 설명 드리겠습니다.   
 
    *demo 디렉토리는 챗팅을 하기 위한 자바 서버   
-   *webrtcpj 디렉토리는 webrtc구현 부분
+   *webrtcpj 디렉토리는 webrtc구현 부분   
 
 1. # 개발 환경
    <img src="readme_img/develop_env.png" style="border:3px solid black;border-radius:9px;width:500px">    
@@ -12,7 +12,7 @@
 1. # 역할 분담
    전체 인원 : 6명   
    본인 : 김현지 - WebRTC 부분   
-   <img src="readme_img/part.png" style="border:3px solid black;border-radius:9px;width:500px">    
+   <img src="readme_img/part2.png" style="border:3px solid black;border-radius:9px;width:500px">    
 
 1. # 개발 일정
    개발 기간 : 1개월   
@@ -24,12 +24,12 @@
 
    1.방 생성   
       Many To Many : 회의 모드로 멘토(가르치는 사람)와 멘티(배우는 사람) 모두 화면에 영상이 출력, 인원 제한 6명   
-      One To Many : 유튜브나 아프리카TV와 같은 개인 방송 모드로 멘토(가르치는 사람)만 화면에 영상이 출력되고 멘티(배우는 사람)는 출력되지 않음, 인원 제한 없음
+      One To Many : 유튜브나 아프리카TV와 같은 개인 방송 모드로 멘토(가르치는 사람)만 화면에 영상이 출력되고 멘티(배우는 사람)는 출력되지 않음, 인원 제한 없음   
 
    2.기능   
       화면 공유 기능(멘토만 해당) : 멘토의 화면을 전체 멘티들과 공유   
       녹화(멘토만 해당) : 현재 수업하고 있는 자신의 화면을 녹화   
-      채팅 : One To Many 모드에서 멘토와 멘티들의 의사소통 수단으로 사용용
+      채팅 : One To Many 모드에서 멘토와 멘티들의 의사소통 수단으로 사용   
 
 1. # WebRTC란?
    <img src="readme_img/server.webp" style="border:3px solid black;border-radius:9px;width:700px">   
